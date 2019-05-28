@@ -1,0 +1,25 @@
+﻿@model Vidly.ViewModels.RandomMovieViewModel
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    @if (Model.Customers.Count == 0)
+    {
+        <text>We dont have customer yet.</text>
+    }
+    else
+    {
+        <ul class="list-group" style="margin-top:2%">
+            <li class="list-group-item"><b>Customers</b></li>
+            @foreach (var customer in Model.Customers)
+            {
+                <li class="list-group-item">@customer.Name</li>
+            }
+        </ul>
+    }
+
+</div>
+
