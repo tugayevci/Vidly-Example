@@ -12,13 +12,37 @@
     }
     else
     {
-        <ul class="list-group" style="margin-top:2%">
+        @*<ul class="list-group" style="margin-top:2%">
             <li class="list-group-item"><b>Customers</b></li>
             @foreach (var customer in Model.Customers)
             {
                 <li class="list-group-item">@customer.Name</li>
             }
-        </ul>
+        </ul>*@
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Discount Rate</th>
+                <th scope="col">Handle</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var customer in Model.Customers)
+            {
+            <tr>
+                <th scope="row">@customer.Id</th>
+                <td>@customer.Name</td>
+                <td>@customer.MembershipType.DiscountRate%</td>
+
+            </tr>
+            }
+        </tbody>
+    </table>
+        
     }
 
 </div>
