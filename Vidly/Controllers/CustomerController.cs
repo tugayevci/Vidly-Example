@@ -28,19 +28,22 @@ namespace Vidly.Controllers
 
         // GET: Customer
         public ActionResult Index()
+        {            
+            var customers = _databaseContext.Customers.Include(c => c.MembershipType).ToList();          
+
+            return View(customers);
+        }
+
+        public ActionResult Details(int id)
         {
-            var movie = new Movie() { Name = "John Wick" };
-            var customers = _databaseContext.Customers.Include(c => c.MembershipType).ToList();
+            Customer customer = _databaseContext.Customers.Include(c => c.MembershipType).Where(x => x.Id == id).FirstOrDefault();
 
-            var viewModel = new RandomMovieViewModel()
+            if (customer==null)
             {
-                Movie = movie,
-                Customers = customers
+                return HttpNotFound();
+            }
 
-            };
-
-            return View(viewModel);
-
+            return View(customer);
         }
     }
 }
