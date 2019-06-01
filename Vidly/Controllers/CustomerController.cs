@@ -26,6 +26,49 @@ namespace Vidly.Controllers
             base.Dispose(disposing);
         }
 
+        public ActionResult New()
+        {
+            var memberShipTypes = _databaseContext.MembershipTypes.ToList();
+            var viewModel = new CustomerFormViewModel
+            {
+                Customer = new Customer(),
+                MembershipTypes = memberShipTypes
+            };
+            return View("CustomerForm",viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(CustomerFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModelTemp = new CustomerFormViewModel
+                {
+                    MembershipTypes = _databaseContext.MembershipTypes.ToList(),
+                    Customer = viewModel.Customer
+                };
+
+                return View("CustomerForm", viewModelTemp);
+            }
+
+            if (viewModel.Customer.Id==0)
+            {
+                _databaseContext.Customers.Add(viewModel.Customer);
+            }
+            else
+            {
+                var customerInDb = _databaseContext.Customers.Single(c => c.Id == viewModel.Customer.Id);
+                customerInDb.Name = viewModel.Customer.Name;
+                customerInDb.Birthdate = viewModel.Customer.Birthdate;
+                customerInDb.IsSubscribedToNewsLetter = viewModel.Customer.IsSubscribedToNewsLetter;
+                customerInDb.MembershipTypeId = viewModel.Customer.MembershipTypeId;
+            }
+
+            _databaseContext.SaveChanges();
+            return RedirectToAction("Index","Customer");
+        }
+
         // GET: Customer
         public ActionResult Index()
         {            
@@ -44,6 +87,24 @@ namespace Vidly.Controllers
             }
 
             return View(customer);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            Customer customer = _databaseContext.Customers.SingleOrDefault(x => x.Id == id);
+
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            var viewModel = new CustomerFormViewModel
+            {
+                Customer = customer,
+                MembershipTypes = _databaseContext.MembershipTypes.ToList()
+            };
+
+            return View("CustomerForm", viewModel);
         }
     }
 }

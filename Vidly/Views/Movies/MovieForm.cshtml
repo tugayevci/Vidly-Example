@@ -1,0 +1,45 @@
+﻿@model Vidly.ViewModels.NewMovieViewModel
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2> @Model.Title</h2>
+
+@using (Html.BeginForm("Save", "Movies"))
+{
+    <div class="form-group" style="margin-top:2%">
+        @Html.LabelFor(x => x.Movie.Name)
+        @Html.TextBoxFor(x => x.Movie.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Movie.Name)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Movie.GenreId)
+        @Html.DropDownListFor(x => x.Movie.GenreId, new SelectList(Model.Genres, "Id", "Name"), "Select Movie Genre", new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Movie.GenreId)
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Movie.NumberInStock)
+        @Html.TextBoxFor(x => x.Movie.NumberInStock, new { @class = "form-control", @type = "number" })
+        @Html.ValidationMessageFor(x => x.Movie.NumberInStock)
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Movie.ReleaseDate)
+        @Html.TextBoxFor(m => m.Movie.ReleaseDate, "{0: d MMM yyyy}", new { @class = "form-control"})
+        @Html.ValidationMessageFor(x => x.Movie.ReleaseDate)
+
+    </div>
+    @Html.HiddenFor(m => m.Movie.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary"> Save </button>
+}
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    }
+
