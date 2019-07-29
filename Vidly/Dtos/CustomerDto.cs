@@ -20,7 +20,7 @@ namespace Vidly.Dtos
         public int MembershipTypeId { get; set; }
 
 
-        [Min18YearsIfAMember]
+        //[Min18YearsIfAMember]
         [Display(Name = "Date of Birth")]
         public DateTime? Birthdate { get; set; }
     }
